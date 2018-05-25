@@ -1,0 +1,43 @@
+storm.scheduler: "org.apache.storm.scheduler.resource.MultitenantResourceAwareScheduler"
+resource.aware.scheduler.priority.strategy: "org.apache.storm.scheduler.resource.strategies.priority.MultitenantSchedulingPriorityStrategy"
+topology.scheduler.strategy: "org.apache.storm.scheduler.resource.strategies.scheduling.MultitenantResourceAwareStrategy"
+storm.network.topography.plugin: "org.apache.storm.networktopography.HostRackDNSToSwitchMapping"
+
+supervisor.memory.capacity.mb: 2048.0
+supervisor.cpu.capacity: 400.0
+supervisor.bandwidth.capacity.mbps: 100.0
+
+supervisor.tc.class.exclude:
+  - "1:"
+  - "1:1"
+
+topology.worker.accept.bandwidth.mbps:
+  - 10
+  - 20
+  - 50
+
+topology.component.resources.onheap.memory.mb: 128.0
+topology.component.resources.offheap.memory.mb: 0.0
+topology.component.cpu.pcore.percent: 50.0
+topology.worker.max.heap.size.mb: 768.0
+
+topology.worker.max.bandwidth.mbps: 10
+
+storm.resource.isolation.plugin.enable: true
+storm.cgroup.memory.enforcement.enable: true
+storm.resource.isolation.plugin: "org.apache.storm.container.cgroup.CgroupManager2"
+storm.cgroup.resources:
+  - "memory"
+
+storm.cgroup.hierarchy.dir: "/sys/fs/cgroup/"
+storm.cgroup.cgexec.cmd: "/usr/bin/cgexec"
+
+resource.aware.scheduler.user.pools:
+    jiangzhileaf:
+        cpu: 100
+        memory: 2048
+        bandwidth: 1024
+
+
+
+
