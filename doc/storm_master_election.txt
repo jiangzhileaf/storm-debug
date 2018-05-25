@@ -1,0 +1,10 @@
+Storm Nimbus Election
+
+Written by jiangzhileaf <menagjiangzhileafe@163.com> based on
+https://github.com/apache/storm (2.0-SNAPSHOT)
+
+storm nimbus election is base on zookeeper,
+using curator framework leader latch 
+it just random choose a nimbus as master when multiple nimbus applying
+
+
