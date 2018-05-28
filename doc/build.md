@@ -9,7 +9,7 @@ mvn clean install -DskipTests=true -Dcheckstyle.skip=true
 
 # 打包安装包
 cd /storm-dist/binary
-mvn clean package -DskipTests=true -Dcheckstyle.skip=true -Dgpg.skip=true
+mvn clean package -Dgpg.skip=true
 
 # 发布编译
 mvn clean install

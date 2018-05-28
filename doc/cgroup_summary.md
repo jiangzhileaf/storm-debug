@@ -99,7 +99,8 @@ top
 ```
 
 ## 3 P.S.
-- 机器重启之后 cgroup 会消失，需要修改启动脚本
+- ubuntu12.04 cgroup-bi:0.37.1-1ubuntu10.1 : cgconfig 系统重启会自动挂载
+- ubuntu14.04 cgroup-bi:0.38-1ubuntu2 : cgroup-lite 会自动挂载所有子系统到 /sys/fs/cgroup
 
 ## 4 Ref
 
@@ -107,3 +108,5 @@ top
 - 官方文档 - https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt
 - Cgroup概述 - https://segmentfault.com/a/1190000006917884
 - 限制cgroup的CPU使用 - https://segmentfault.com/a/1190000008323952
+- cgconfig service - https://www.systutorials.com/docs/linux/man/5-cgconfig.conf
+- load memory - https://askubuntu.com/questions/417215/how-does-kernel-support-swap-limit?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa

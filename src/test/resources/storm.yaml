@@ -4,7 +4,7 @@ topology.scheduler.strategy: "org.apache.storm.scheduler.resource.strategies.sch
 storm.network.topography.plugin: "org.apache.storm.networktopography.HostRackDNSToSwitchMapping"
 
 supervisor.memory.capacity.mb: 2048.0
-supervisor.cpu.capacity: 400.0
+supervisor.cpu.capacity: 2000.0
 supervisor.bandwidth.capacity.mbps: 100.0
 
 supervisor.tc.class.exclude:
@@ -27,7 +27,9 @@ storm.resource.isolation.plugin.enable: true
 storm.cgroup.memory.enforcement.enable: true
 storm.resource.isolation.plugin: "org.apache.storm.container.cgroup.CgroupManager2"
 storm.cgroup.resources:
+  - "cpu"
   - "memory"
+  - "net_cls"
 
 storm.cgroup.hierarchy.dir: "/sys/fs/cgroup/"
 storm.cgroup.cgexec.cmd: "/usr/bin/cgexec"

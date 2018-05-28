@@ -41,7 +41,7 @@ sudo chown hiido:hiido -R  /sys/fs/cgroup/memory/storm
 sudo chown hiido:hiido -R  /sys/fs/cgroup/net_cls/storm
 
 # change the defaut value to avoid exception from MemoryCore.getPhysicalUsageLimit()
-echo 4611686018427387904 > /sys/fs/cgroup/memory/storm/memory.limit_in_bytes
+sudo bash -c 'echo 4611686018427387904 > /sys/fs/cgroup/memory/storm/memory.limit_in_bytes'
 ```
 
 ### 1.2 ubuntu12.04 cgroup-bi:0.37.1-1ubuntu10.1
@@ -64,23 +64,55 @@ sudo apt-get install cgroup-bin -y
 
 # modify /etc/cgconfig.conf
 # content as below
-"
+'
 mount {
-	cpuset	= /sys/fs/cgroup/cpuset;
 	cpu     = /sys/fs/cgroup/cpu;
-	cpuacct	= /sys/fs/cgroup/cpuacct;
 	memory	= /sys/fs/cgroup/memory;
-	devices	= /sys/fs/cgroup/devices;
-	freezer	= /sys/fs/cgroup/freezer;
 	net_cls	= /sys/fs/cgroup/net_cls;
-	blkio	= /sys/fs/cgroup/blkio;
 }
-"
+
+group storm {
+   	perm {
+        task {
+            uid = hiido;
+            gid = hiido;
+        }
+
+        admin {
+            uid = hiido;
+            gid = hiido;
+        }
+   	}
+
+   	cpu{
+   	}
+   	memory{
+		memory.limit_in_bytes = "4611686018427387904";
+   	}
+   	net_cls{
+   	}
+}
+
+'
 
 # restart the cgroup service
-sudo service cgconfig restart
+sudo service cgconfig start
 
-# if not ok please check /etc/init/cgconfig.conf
+# if exist subsystem, use cmd below to clear then start service
+# to clear the binding subsystem
+sudo /usr/sbin/cgclear
+
+# umount the cgroup
+umount /sys/fs/cgroup
+```
+
+### 1.3 Quick fix
+- WARNING: No memory limit support or WARNING: WARNING: No swap limit support
+```sh
+# vim /etc/default/grub modify content as below
+GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
+sudo update-grub
+sudo reboot
 ```
 
 ## 2 tc
