@@ -25,6 +25,7 @@ topology.worker.max.bandwidth.mbps: 10
 
 storm.resource.isolation.plugin.enable: true
 storm.cgroup.memory.enforcement.enable: true
+storm.cgroup.memory.swap.limit.enable: true
 storm.resource.isolation.plugin: "org.apache.storm.container.cgroup.CgroupManager2"
 storm.cgroup.resources:
   - "cpu"

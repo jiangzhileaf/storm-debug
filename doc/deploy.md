@@ -42,6 +42,7 @@ sudo chown hiido:hiido -R  /sys/fs/cgroup/net_cls/storm
 
 # change the defaut value to avoid exception from MemoryCore.getPhysicalUsageLimit()
 sudo bash -c 'echo 4611686018427387904 > /sys/fs/cgroup/memory/storm/memory.limit_in_bytes'
+sudo bash -c 'echo 4611686018427387904 > /sys/fs/cgroup/memory/storm/memory.memsw.limit_in_bytes'
 ```
 
 ### 1.2 ubuntu12.04 cgroup-bi:0.37.1-1ubuntu10.1
@@ -88,6 +89,7 @@ group storm {
    	}
    	memory{
 		memory.limit_in_bytes = "4611686018427387904";
+		memory.memsw.limit_in_bytes = "4611686018427387904";
    	}
    	net_cls{
    	}
