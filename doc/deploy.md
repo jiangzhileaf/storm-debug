@@ -2,7 +2,7 @@
 
 ## 1 cgroup
 
-### 1.1 ubuntu14.04 cgroup-bi:0.38-1ubuntu2
+### 1.1 ubuntu14.04 cgroup-bin:0.38-1ubuntu2 or ubuntu16.04 cgroup-bin:0.41-7ubuntu1
 
 ```sh
 # check is allow need subsystem loaded 
@@ -115,6 +115,8 @@ umount /sys/fs/cgroup
 GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1"
 sudo update-grub
 sudo reboot
+# or 
+# add config "storm.cgroup.memory.swap.limit.enable: false"
 ```
 
 ## 2 tc

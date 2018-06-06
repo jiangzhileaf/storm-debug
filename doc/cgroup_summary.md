@@ -102,7 +102,21 @@ top
 - ubuntu12.04 cgroup-bi:0.37.1-1ubuntu10.1 : cgconfig 系统重启会自动挂载
 - ubuntu14.04 cgroup-bi:0.38-1ubuntu2 : cgroup-lite 会自动挂载所有子系统到 /sys/fs/cgroup
 
-## 4 Ref
+## 4 Cgroup OOM
+
+### ubuntu12.04 cgroup-bi:0.37.1-1ubuntu10.1
+- 有内核漏洞，oom导致机器无响应，需要重启
+
+### ubuntu14.04 cgroup-bin:0.38-1ubuntu2
+- if swap limit enable, oom，进程被kill掉
+- if swap limit disable, 进程会不断swap，卡住，cpu短时间跑满
+
+### ubuntu16.04 cgroup-bin:0.41-7ubuntu1
+- if swap limit enable, TODO
+- if swap limit disable, 进程会不断swap，卡住，cpu短时间跑满
+
+
+## 5 Ref
 
 - find and load net_cls - https://serverfault.com/questions/485919/cannot-find-network-subsystem-in-cgroup-on-ubuntu-12-04-lts
 - 官方文档 - https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt

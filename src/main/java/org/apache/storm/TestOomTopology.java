@@ -13,8 +13,12 @@ import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.topology.base.BaseRichSpout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestOomTopology {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TestOomTopology.class);
 
     static class OOMObject {
 
@@ -26,12 +30,25 @@ public class TestOomTopology {
 
         @Override
         public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        list.add(new OOMObject());
+                    }
+                }
+            }).start();
+
         }
 
         @Override
         public void nextTuple() {
-            while (true) {
-                list.add(new OOMObject());
+            try {
+                LOG.info("list size: {}", list.size());
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 

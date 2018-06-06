@@ -15,7 +15,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.topology.base.BaseRichSpout;
 
-public class TesBinaryConfTopology {
+public class TestBinaryConfTopology {
 
     private static final byte[] testBytes = getRandomByteArray(12345, 1024);
 

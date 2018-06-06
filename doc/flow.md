@@ -71,11 +71,123 @@ Slot.handleWaitingForBlobLocalization()
 staticState.containerLauncher.launchContainer()
 Container.setup();
 Container.launch();
-// start worker with process builder
+Slot.handleWaitingForWorkerStart()
+Slot.handleRunning()
 
+//Async 
+// start worker with process builder
 //Logwriter start
 //Worker Start
 ```
 
+## Topology Kill
+
+### sequence Diagram:
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Nimbus
+    participant Supervisor
+    participant Slot
+    participant Worker
+    Client->>Nimbus: kill topology
+    Nimbus->>Nimbus: write zk, mark status killed
+    Nimbus->>Client: return success
+    Nimbus->>Supervisor: remove assignment (async)
+    Supervisor->>Slot: kill worker (async)
+    Slot->>Worker: force kill
+    Slot->>Slot: clean up, release slot
+```
+
+### stack:
+```
+//client side:
+storm kill topology-name
+bin/storm.py
+
+//nimbus side:
+Nimbus.killTopologyWithOpts()
+Nimbus.transitionName()
+// TOPO_STATE_TRANSITIONS.get("ACTIVE").get("KILL")
+KILL_TRANSITION
+clusterState.updateStorm()
+
+// Async
+Nimbus.transitionName()
+// TOPO_STATE_TRANSITIONS.get("KILLED").get("REMOVE")
+REMOVE_TRANSITION
+notifySupervisorsAsKilled()
+notifySupervisorsAssignments()
+
+Async Loop:
+AssignmentDistributionService.sendAssignmentsToNode()
+// allocate the assinment to supervisor
+
+//supervisor side:
+Nimbus.getSupervisorAssignments()
+// Nimbus get assignment form local cache
+
+Async Loop:
+ReadClusterState.run()
+Slot.setNewAssignment()
+Slot.addProfilerActions
+
+Async Loop:
+Slot.run()
+DynamicState.stateMachineStep()
+Slot.handleKill()
+```
+
 ## worker run
 
+### stack:
+```
+//local mode start from start()
+Worker.main() 
+Worker.start()
+Worker.loadWorker()
+
+Executor.mkExecutor()
+Executor.execute()
+
+// async Loop
+// SpoutExecutor
+SpoutExecutor.call()
+SpoutExecutor.init()
+spoutObject.open()
+
+// SpoutExecutor.call()
+// anonymous call()
+    for (int j = 0; j < spouts.size(); j++) { // in critical path. don't use iterators.
+        spouts.get(j).nextTuple();
+    }
+SpoutOutputCollector.emit()
+SpoutOutputCollectorImpl.emit()
+SpoutOutputCollectorImpl.sendSpoutMsg()
+ExecutorTransfer.tryTransfer()
+workerData.tryTransferRemote()
+or workerData.tryTransferLocal()
+
+
+// async Loop
+// BoltExecutor
+BoltExecutor.call()
+BoltExecutor.init()
+BoltObject.prepare()
+
+// BoltExecutor.call()
+// anonymous call()
+receiveQueue.consume
+JCQueue.consumeImpl()
+Consumer.accept()
+Executor.tupleActionFn()
+Bolt.tupleActionFn()
+boltObject.execute(tuple);
+
+BasicOutputCollector.emit()
+BoltOutputCollectorImpl.emit()
+BoltOutputCollectorImpl.boltEmit()
+ExecutorTransfer.tryTransfer()
+// as same as spout
+
+```

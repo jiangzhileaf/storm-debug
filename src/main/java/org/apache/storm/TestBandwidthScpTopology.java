@@ -13,7 +13,7 @@ import org.apache.storm.topology.base.BaseRichSpout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BandwidthControlTopology {
+public class TestBandwidthScpTopology {
 
     public static class TcSpout extends BaseRichSpout {
         private static final Logger LOG = LoggerFactory.getLogger(TcSpout.class);
@@ -56,15 +56,12 @@ public class BandwidthControlTopology {
      */
     public static final void main(String[] args) throws Exception {
 
-        int workerNum = Integer.parseInt(args[0]);
-        int concurrent = Integer.parseInt(args[1]);
-
         Config conf = new Config();
 
         TopologyBuilder builder = new TopologyBuilder();
 
-        builder.setSpout("spout", new TcSpout(), concurrent);
-        conf.setNumWorkers(workerNum);
+        builder.setSpout("spout", new TcSpout(), 1);
+        conf.setNumWorkers(1);
         conf.setNumAckers(0);
         conf.setWorkerMaxBandwidthMbps(10);
         conf.setTopologyWorkerMaxHeapSize(768);
