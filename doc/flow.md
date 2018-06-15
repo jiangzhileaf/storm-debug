@@ -191,3 +191,31 @@ ExecutorTransfer.tryTransfer()
 // as same as spout
 
 ```
+
+## nimbus thrift init
+
+### stack:
+Nimbus.main()
+Nimbus.launch()
+Nimbus.launchServer()
+new ThriftServer()
+AuthUtils.getTransportPlugin()
+
+default: SimpleTransportPlugin
+
+getServer()
+// bind 0.0.0.0
+// maxBufferSize , is used to avoid unvalid connect making oom exception , like http.
+
+## worker netty init
+
+### stack:
+Worker.main()
+Worker.start()
+Worker.loadWorker()
+new WorkerState() // context = null
+TransportFactory.makeContext() // default: org.apache.storm.messaging.netty.Context
+mqContext.bind()
+new Server()
+new StormServerPipelineFactory()
+new StormServerHandler()

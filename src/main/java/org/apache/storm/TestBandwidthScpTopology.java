@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 
 public class TestBandwidthScpTopology {
 
+    private static final String SCP_SOURCE = "scpSource";
+    private static final String SCP_TARGET = "scpTarget";
+
     public static class TcSpout extends BaseRichSpout {
         private static final Logger LOG = LoggerFactory.getLogger(TcSpout.class);
 
@@ -24,8 +27,9 @@ public class TestBandwidthScpTopology {
         @Override
         public void open(Map<String, Object> conf, TopologyContext context, SpoutOutputCollector collector) {
             this.collector = collector;
-            String id = String.valueOf(System.currentTimeMillis());
-            cmds = Arrays.asList("/usr/bin/scp", "/tmp/test/rtAdminConsole2.tar.gz", "testnode2:~");
+            String scpSource = (String) conf.get(SCP_SOURCE);
+            String scpTarget = (String) conf.get(SCP_TARGET);
+            cmds = Arrays.asList("/usr/bin/scp", scpSource, scpTarget);
         }
 
         @Override
@@ -57,6 +61,9 @@ public class TestBandwidthScpTopology {
     public static final void main(String[] args) throws Exception {
 
         Config conf = new Config();
+
+        conf.put(SCP_SOURCE, args[0]);
+        conf.put(SCP_TARGET, args[1]);
 
         TopologyBuilder builder = new TopologyBuilder();
 

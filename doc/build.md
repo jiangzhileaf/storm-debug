@@ -8,7 +8,7 @@ mvn clean install -pl storm-server -amd -DskipTests=true -Dcheckstyle.skip=true
 mvn clean install -DskipTests=true -Dcheckstyle.skip=true
 
 # 打包安装包
-cd /storm-dist/binary
+cd storm-dist/binary
 mvn clean package -Dgpg.skip=true
 
 # 发布编译

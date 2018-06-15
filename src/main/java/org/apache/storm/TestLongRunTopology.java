@@ -12,8 +12,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.topology.base.BaseRichSpout;
 
-public class TestCpuLimitTopology {
-
+public class TestLongRunTopology {
 
     private static class TestSpout extends BaseRichSpout {
 
@@ -23,9 +22,10 @@ public class TestCpuLimitTopology {
 
         @Override
         public void nextTuple() {
-            int i = 0;
-            while (true) {
-                i++;
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
@@ -35,14 +35,15 @@ public class TestCpuLimitTopology {
         }
     }
 
-    public static void main( String[] args ) throws AlreadyAliveException, InvalidTopologyException, UnsupportedEncodingException, AuthorizationException {
+    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, UnsupportedEncodingException, AuthorizationException {
 
         TopologyBuilder builder = new TopologyBuilder();
 
         builder.setSpout("TestSpout", new TestSpout(), 1);
 
         Config conf = new Config();
+        conf.setNumAckers(0);
 
-        StormSubmitter.submitTopology("TestCpuLimitTopology", conf, builder.createTopology());
+        StormSubmitter.submitTopology("TestLongRunTopology", conf, builder.createTopology());
     }
 }
