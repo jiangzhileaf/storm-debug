@@ -29,8 +29,8 @@ sudo mount -t cgroup cpu -ocpu /sys/fs/cgroup/cpu
 sudo mkdir /sys/fs/cgroup/memory
 sudo mount -t cgroup memory -omemory /sys/fs/cgroup/memory
 
-sudo mkdir /sys/fs/cgroup/net_cls/
-sudo mount -t cgroup net_cls/ -onet_cls/ /sys/fs/cgroup/net_cls
+sudo mkdir /sys/fs/cgroup/net_cls
+sudo mount -t cgroup net_cls -onet_cls /sys/fs/cgroup/net_cls
 
 # create the storm subgroup and change the own
 sudo mkdir /sys/fs/cgroup/cpu/storm
