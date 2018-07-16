@@ -112,11 +112,16 @@ top
 - if swap limit disable, 进程会不断swap，卡住，cpu短时间跑满
 
 ### ubuntu16.04 cgroup-bin:0.41-7ubuntu1
-- if swap limit enable, TODO
+- if swap limit enable, oom，进程被kill掉
 - if swap limit disable, 进程会不断swap，卡住，cpu短时间跑满
 
+## 7 use cgroup Memory with JVM
+- jvm provide memory limit capability, so in common way, just use jvm control is enough.
+- if have special requirement need to use cgroup memory control, must be well test first.
+- the cgroup value "memory.memsw.limit_in_bytes", "memory.limit_in_bytes" and the JVM max heap size and max perm size is relative, need to be well tested.
+- cgroup oom kill should be well considered
 
-## 5 Ref
+## 6 Ref
 
 - find and load net_cls - https://serverfault.com/questions/485919/cannot-find-network-subsystem-in-cgroup-on-ubuntu-12-04-lts
 - 官方文档 - https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt

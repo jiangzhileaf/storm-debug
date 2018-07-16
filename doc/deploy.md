@@ -105,7 +105,7 @@ sudo service cgconfig start
 sudo /usr/sbin/cgclear
 
 # umount the cgroup
-umount /sys/fs/cgroup
+sudo umount /sys/fs/cgroup
 ```
 
 ### 1.3 Quick fix
@@ -119,6 +119,13 @@ sudo reboot
 # add config "storm.cgroup.memory.swap.limit.enable: false"
 ```
 
+- cgroup-lite conflict with cgroup-bin, and could not remove
+```sh
+# remove cgroup-lite umount script, so that we can remove cgroup-lite
+sudo mv /bin/cgroups-umount ~
+# then install cgroup-bin
+```
+
 ## 2 tc
 ```sh
 # machine max bandwith is 100mbit
@@ -127,31 +134,34 @@ sudo reboot
 
 # root queue
 sudo tc qdisc add dev eth2 root handle 1: htb default 1
-sudo tc class add dev eth2 parent 1: classid 1: htb rate 100mbit
+sudo tc class add dev eth2 parent 1: classid 1: htb rate 1000mbit
 
 # default queue with Stochastic Fairness Queueing
-sudo tc class add dev eth2 parent 1: classid 1:1 htb rate 10mbit
+sudo tc class add dev eth2 parent 1: classid 1:1 htb rate 1000mbit
 sudo tc qdisc add dev eth2 parent 1:1 handle 2: sfq perturb 10
 
 # add queue which should be  monopolized by worker
-sudo tc class add dev eth2 parent 1: classid 1:2 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:3 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:4 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:5 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:6 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:7 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:8 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:9 htb rate 10mbit
-sudo tc class add dev eth2 parent 1: classid 1:10 htb rate 10mbit
+sudo tc class add dev eth2 parent 1: classid 1:2 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:3 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:4 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:5 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:6 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:7 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:8 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:9 htb rate 10mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:10 htb rate 10mbit ceil 200mbit
 
-sudo tc class add dev eth2 parent 1: classid 1:11 htb rate 20mbit
-sudo tc class add dev eth2 parent 1: classid 1:12 htb rate 20mbit
-sudo tc class add dev eth2 parent 1: classid 1:13 htb rate 20mbit
-sudo tc class add dev eth2 parent 1: classid 1:14 htb rate 20mbit
-sudo tc class add dev eth2 parent 1: classid 1:15 htb rate 20mbit
+sudo tc class add dev eth2 parent 1: classid 1:11 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:12 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:13 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:14 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:15 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:16 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:17 htb rate 20mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:18 htb rate 20mbit ceil 200mbit
 
-sudo tc class add dev eth2 parent 1: classid 1:16 htb rate 50mbit
-sudo tc class add dev eth2 parent 1: classid 1:17 htb rate 50mbit
+sudo tc class add dev eth2 parent 1: classid 1:19 htb rate 50mbit ceil 200mbit
+sudo tc class add dev eth2 parent 1: classid 1:20 htb rate 50mbit ceil 200mbit
 
 # add filter control tc with cgroup
 sudo tc filter add dev eth2 protocol ip parent 1:0 prio 1 handle 1: cgroup
@@ -165,5 +175,3 @@ sudo tc filter add dev eth2 protocol ip parent 1:0 prio 1 handle 1: cgroup
 # modify the conf
 # start nimbus， supervisor， ui
 ```
-
-

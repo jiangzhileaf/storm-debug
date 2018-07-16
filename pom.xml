@@ -28,6 +28,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.11</junit.version>
+       <!-- <provided.scope>compile</provided.scope>-->
         <provided.scope>provided</provided.scope>
     </properties>
 
@@ -52,11 +53,25 @@
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-server</artifactId>
             <version>${project.version}</version>
-            <!--
-              Use "provided" scope to keep storm out of the jar-with-dependencies
-              For IntelliJ dev, intellij will load properly.
-            -->
             <scope>${provided.scope}</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr-runtime</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 
